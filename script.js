@@ -1,4 +1,5 @@
 const urlApi = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
+const textPrice = '.text-price';
 let total = 0;
 
 function createProductImageElement(imageSource) {
@@ -30,17 +31,24 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+const saveLocalStore = () => {
+  const cart = document.querySelector('.cart').innerHTML;
+  localStorage.setItem('cart', cart);
+};
+
 function cartItemClickListener(event) {
   // coloque seu código aqui
-  const spanTotal = document.querySelector('.text-price');
+  const spanTotal = document.querySelector(textPrice);
   const price = event.target.lastChild.innerText;
   total -= price;
+  if (total < 0) total = 0;
   spanTotal.innerHTML = `Preço Total: $<span class="total-price">${total}</span>`;
   event.target.remove();
+  saveLocalStore();
 }
 
 const totalPrice = (price = 0) => {
-  const spanTotal = document.querySelector('.text-price');
+  const spanTotal = document.querySelector(textPrice);
   total += price;
   spanTotal.innerHTML = `Preço Total: $<span class="total-price">${total}</span>`;
 };
@@ -74,6 +82,7 @@ const searchId = (id) => {
     const cart = document.querySelector('.cart__items');
     cart.appendChild(createCartItemElement(data));
     totalPrice(data.price);
+    saveLocalStore();
   }));
 };
 
@@ -83,6 +92,7 @@ const clearCart = () => {
   while (cart.firstChild) {
     cart.removeChild(cart.firstChild);
   }
+  saveLocalStore();
 };
 
 const execute = (click) => {
@@ -92,13 +102,26 @@ const execute = (click) => {
   }
 
   if (click.target.classList.contains('empty-cart')) {
+    const spanTotal = document.querySelector(textPrice);
+    total = 0;
+    spanTotal.innerHTML = `Preço Total: $<span class="total-price">${total}</span>`;
+
     clearCart();
+  }
+};
+
+const loadLocal = () => {
+  const cart = document.querySelector('.cart');
+  const saved = localStorage.getItem('cart', cart);
+  if (saved) {
+    cart.innerHTML = saved;
   }
 };
 
 window.onload = () => { 
   fetchItemPromise();
   totalPrice();
+  loadLocal();
 
   document.addEventListener('click', execute);
 };
