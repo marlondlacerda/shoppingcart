@@ -34,13 +34,14 @@ const totalPrice = () => {
   const getPrice = document.querySelectorAll('.cart__item');
   let price = 0;
   getPrice.forEach((getPriceText) => {
-    const removePrice = getPriceText.innerText.split('$');
-    price += Number(removePrice[1]);
+    const removePrice = getPriceText.innerText.split('$'); // Ele quebra em 2 arrays o texto usando o $ como pausa
+    price += Number(removePrice[1]); // Eu pego o segundo índice do array que seriam os numeros e por ser string, peço para virar numero
   });
 
-  getTotal.innerHTML = `${(Math.round((price * 100)) / 100)}`;
+  getTotal.innerHTML = `${(Math.round((price * 100)) / 100)}`; // Calculo para arredondar os números
 };
 
+// Save point dos li's.
 const saveLocalStorage = () => {
   const cart = document.querySelector(olItems).innerHTML;
 
@@ -48,11 +49,13 @@ const saveLocalStorage = () => {
   localStorage.setItem('cart', JSON.stringify(cart));
 };
 
+// Load point dos li's ao carregar a pagina.
 const loadLocalStorage = () => {
   const cart = document.querySelector(olItems);
   cart.innerHTML = JSON.parse(localStorage.getItem('cart'));
 };
 
+// Remove o item do carrinho ao clicar nele
 function cartItemClickListener(event) {
   // coloque seu código aqui
   event.target.remove();
@@ -74,6 +77,8 @@ const addProductItem = (item) => {
   items.appendChild(createProductItemElement(item));
 };
 
+// Função inical que captura o item específico (No caso computador)
+// Ele faz a promesa pegando o json do mercadolivre e chama função de addProductItem
 const fetchItemPromise = async (query) => {
   const api = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`);
   const resultJson = await api.json();
@@ -81,6 +86,8 @@ const fetchItemPromise = async (query) => {
   dataJson.forEach((item) => addProductItem(item));
 };
 
+// Função com o imput do ID do produto, ele irá dar fetch no json e logo em seguida chamar a função
+// para adicionar no carrinho => Fazer o total dos preços > salvar no LocalStorage!
 const searchId = async (id) => {
   const cart = document.querySelector(olItems);
   const idApi = await fetch(`https://api.mercadolibre.com/items/${id}`);
@@ -91,6 +98,8 @@ const searchId = async (id) => {
   };
 
 // source https://www.javascripttutorial.net/dom/manipulating/remove-all-child-nodes/
+// Remove todos os itens do carrinho, chama a função para calcular o total e zerar dinamicamente
+// E salva o status no localStorage por último!
 const clearCart = () => {
   const cart = document.querySelector(olItems);
   while (cart.firstChild) {
@@ -101,15 +110,18 @@ const clearCart = () => {
 };
 
 const execute = (click) => {
+// Verifica se o click foi para adicionar o item ao carrinho!
   if (click.target.classList.contains('item__add')) {
     const id = ((click.target).parentNode.firstChild).innerText;
     searchId(id);
   }
 
+// Verifica se o click foi para esvaziar o carrinho!
   if (click.target.classList.contains('empty-cart')) {
     clearCart();
   }
 
+// Verifica se o click é para remover o item do carrinho!
   if (click.target.classList.contains('cart__item')) {
     click.target.remove();
     totalPrice();
@@ -122,5 +134,6 @@ window.onload = () => {
   loadLocalStorage();
   totalPrice();
 
+  // Essa função irá ouvir os clicks em toda a página e fazer as verificações
   document.addEventListener('click', execute);
 };
