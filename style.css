@@ -56,11 +56,13 @@
 }
 
 .item .item__add {
-  background-color: green;
-  border: 0;
+  border: 2px solid #0dcaf0;
   cursor: pointer;
   margin: 0;
   padding: 5px;
+  position: relative;
+  background: transparent;
+
 }
 
 .cart {
@@ -73,4 +75,20 @@
   flex-basis: 1;
   font-size: 16pt;
   text-align: center;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  background: #0dcaf0;
+  width: 0;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  transition: all .5s ease;
+}
+
+.btn:hover::before {
+  width: 100%;
 }
