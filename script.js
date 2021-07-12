@@ -29,6 +29,23 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+// source https://dev.to/vaishnavme/displaying-loading-animation-on-fetch-api-calls-1e5m
+// showing loading
+const displayLoading = () => {
+  const loader = document.querySelector('#loading');
+  loader.classList.add('loading');
+  // to stop loading after some time
+  setTimeout(() => {
+      loader.classList.remove('loading');
+  }, 10000);
+};
+
+// hiding loading 
+const hideLoading = () => {
+  const loader = document.querySelector('#loading');
+  loader.remove();
+};
+
 const totalPrice = () => {
   const getTotal = document.querySelector('.total-price');
   const getPrice = document.querySelectorAll('.cart__item');
@@ -80,9 +97,11 @@ const addProductItem = (item) => {
 // Função inical que captura o item específico (No caso computador)
 // Ele faz a promesa pegando o json do mercadolivre e chama função de addProductItem
 const fetchItemPromise = async (query) => {
+  displayLoading();
   const api = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`);
   const resultJson = await api.json();
   const dataJson = await resultJson.results;
+  hideLoading();
   dataJson.forEach((item) => addProductItem(item));
 };
 
