@@ -20,7 +20,7 @@
 
 ## Preview
 <div align="left" style="display: inline_block">
-  <a href="https://marlondlacerda-shopping-cart.vercel.app/">Clique aqui</a> para ter acesso a um preview do App.
+  <a href="https://marlondlacerda-shoppingcart.vercel.app/">Clique aqui</a> para ter acesso a um preview do App.
 </div>
 
 ---
