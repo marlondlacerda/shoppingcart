@@ -351,6 +351,6 @@ Mostre a palavra "loading..." em algum lugar da página **apenas durante** a req
 </div>
 <div align="center">
   
-  [⬆ Voltar para o topo](#boas-vindas-ao-repositório-do-projeto-carrinho-de-compras)
+  [⬆ Voltar para o topo](#boas-vindas-ao-repositório-do-projeto-carrinho-de-compras-)
 
 </div>
